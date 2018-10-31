@@ -98,13 +98,16 @@ X_in = Input(shape=(X.shape[1],), sparse=True)
 # Define model architecture
 # print ("L2 type {0}, X_in type {1}, A_in type {2}".format(type(L2), type(X_in), type(A_in)))
 # print ("[X_in] + A_in type {0}".format(type([X_in] + A_in))) # list
-print ("[X_in] + A_in type {0}".format(type(([X_in] + A_in)[0]))) # list
-print ("A_in.shape=({0},)".format(len(A_in)))
+# print ("[X_in] + A_in type {0}".format(type(([X_in] + A_in)[0]))) # list
+# print ("A_in.shape=({0},)".format(len(A_in)))
 H = GraphConvolution(HIDDEN, support, num_bases=BASES, featureless=True,
                      activation='relu',
                      W_regularizer=l2(L2))([X_in] + A_in)
 
 H = Dropout(DO)(H)
+# print ("A_in.shape=({0},)".format(len(A_in),)) # (47,)
+# print ("H.shape={0}".format(H.shape)) # (23644, 16)
+# print ("support={0}".format(support)) # 47
 Y = GraphConvolution(y_train.shape[1], support, num_bases=BASES,
                      activation='softmax')([H] + A_in)
 
