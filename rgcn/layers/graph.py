@@ -1,9 +1,9 @@
 from __future__ import print_function
 
 from keras import activations
-# from keras import initializations
+from keras import initializations as initializers
 # In Keras 2.0, initializations was renamed as initializers. You should therefore instead write initializers
-from keras import initializers
+# from keras import initializers
 from keras import regularizers
 from keras.engine import Layer
 from keras.layers import Dropout
@@ -12,10 +12,11 @@ import keras.backend as K
 
 import os
 
-USE_THEANO = False
+
+USE_THEANO = True
 
 def set_keras_backend(backend):
-
+    from importlib import reload # for python 3
     if K.backend() != backend:
         os.environ['KERAS_BACKEND'] = backend
         reload(K)
@@ -118,11 +119,13 @@ class GraphConvolution(Layer):
             output = K.dot(supports, V)
         else:
             output = K.dot(supports, self.W)
+            print (supports.shape) # (?, 752)
+            print 
+            # self.W dim [1111268,2]
 
         # if featureless add dropout to output, by elementwise multiplying with column vector of ones,
         # with dropout applied to the vector of ones.
         if self.featureless:
-            '''
             tmp = K.ones(self.num_nodes)
             tmp_do = Dropout(self.dropout)(tmp)
             output = (output.T * tmp_do).T
@@ -130,6 +133,7 @@ class GraphConvolution(Layer):
             tmp = K.ones((self.num_nodes,))
             tmp_do = Dropout(self.dropout)(tmp)
             output = K.transpose(K.transpose(output) * tmp_do)
+            '''
             
 
         if self.bias:

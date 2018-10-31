@@ -62,8 +62,8 @@ DO = args['dropout']
 dirname = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 with open(dirname + '/' + DATASET + '.pickle', 'rb') as f:
-    # data = pkl.load(f, encoding='iso-8859-1') # for python 3
-    data = pkl.load(f)
+    data = pkl.load(f, encoding='iso-8859-1') # for python 3
+    # data = pkl.load(f)
 
 A = data['A']
 y = data['y']
@@ -86,7 +86,7 @@ X = sp.csr_matrix(A[0].shape)
 # Normalize adjacency matrices individually
 for i in range(len(A)):
     d = np.array(A[i].sum(1)).flatten()
-    d_inv = 1. / d
+    d_inv = 1. / (d + 1e-5)
     d_inv[np.isinf(d_inv)] = 0.
     D_inv = sp.diags(d_inv)
     A[i] = D_inv.dot(A[i]).tocsr()
