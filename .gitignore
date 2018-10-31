@@ -1,0 +1,8 @@
+./rgcn/bgs.pickle
+./rgcn/am.pickle
+./rgcn/data/am/*
+./rgcn/data/bgs/*
+rgcn/bgs.pickle
+rgcn/am.pickle
+rgcn/data/am/*
+rgcn/data/bgs/*
