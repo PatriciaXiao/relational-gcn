@@ -5,14 +5,9 @@ from keras.models import Model
 from keras.optimizers import Adam
 from keras.regularizers import l2
 
-'''
 from rgcn.layers.graph import GraphConvolution
 from rgcn.layers.input_adj import InputAdj
 from rgcn.utils import *
-'''
-from layers.graph import GraphConvolution
-from layers.input_adj import InputAdj
-from utils import *
 
 import pickle as pkl
 
@@ -60,7 +55,6 @@ DO = args['dropout']
 dirname = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 with open(dirname + '/' + DATASET + '.pickle', 'rb') as f:
-    # data = pkl.load(f, encoding='iso-8859-1') # for python 3
     data = pkl.load(f)
 
 A = data['A']
@@ -93,14 +87,9 @@ A_in = [InputAdj(sparse=True) for _ in range(support)]
 X_in = Input(shape=(X.shape[1],), sparse=True)
 
 # Define model architecture
-# print ("L2 type {0}, X_in type {1}, A_in type {2}".format(type(L2), type(X_in), type(A_in)))
-# print ("[X_in] + A_in type {0}".format(type([X_in] + A_in))) # list
-print ("[X_in] + A_in type {0}".format(type(([X_in] + A_in)[0]))) # list
 H = GraphConvolution(HIDDEN, support, num_bases=BASES, featureless=True,
                      activation='relu',
-                     # W_regularizer=l2(L2))([X_in] + A_in)
                      W_regularizer=l2(L2))([X_in] + A_in)
-
 H = Dropout(DO)(H)
 Y = GraphConvolution(y_train.shape[1], support, num_bases=BASES,
                      activation='softmax')([H] + A_in)

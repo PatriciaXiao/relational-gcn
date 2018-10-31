@@ -2,24 +2,13 @@ from __future__ import print_function
 
 from keras import activations
 # from keras import initializations
-# In Keras 2.0, initializations was renamed as initializers. You should therefore instead write initializers
+# In Keras 2.0, initializations was renamed as initializers. You should therefore instead write
 from keras import initializers
 from keras import regularizers
 from keras.engine import Layer
 from keras.layers import Dropout
 
 import keras.backend as K
-
-import os
-
-def set_keras_backend(backend):
-
-    if K.backend() != backend:
-        os.environ['KERAS_BACKEND'] = backend
-        reload(K)
-        assert K.backend() == backend
-
-set_keras_backend("theano")
 
 
 class GraphConvolution(Layer):
@@ -58,7 +47,6 @@ class GraphConvolution(Layer):
         return output_shape  # (batch_size, output_dim)
 
     def build(self, input_shapes):
-        # print("hello there") # it goes here
         features_shape = input_shapes[0]
         if self.featureless:
             self.num_nodes = features_shape[1]  # NOTE: Assumes featureless input (i.e. square identity mx)
@@ -94,7 +82,6 @@ class GraphConvolution(Layer):
             del self.initial_weights
 
     def call(self, inputs, mask=None):
-
         features = inputs[0]
         A = inputs[1:]  # list of basis functions
 
@@ -120,15 +107,9 @@ class GraphConvolution(Layer):
         # if featureless add dropout to output, by elementwise multiplying with column vector of ones,
         # with dropout applied to the vector of ones.
         if self.featureless:
-            '''
             tmp = K.ones(self.num_nodes)
             tmp_do = Dropout(self.dropout)(tmp)
             output = (output.T * tmp_do).T
-            '''
-            tmp = K.ones((self.num_nodes,))
-            tmp_do = Dropout(self.dropout)(tmp)
-            output = (output.T * tmp_do).T
-            
 
         if self.bias:
             output += self.b

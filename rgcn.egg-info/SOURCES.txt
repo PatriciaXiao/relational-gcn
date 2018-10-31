@@ -1,0 +1,15 @@
+README.md
+setup.py
+rgcn/__init__.py
+rgcn/data_utils.py
+rgcn/prepare_dataset.py
+rgcn/train.py
+rgcn/utils.py
+rgcn.egg-info/PKG-INFO
+rgcn.egg-info/SOURCES.txt
+rgcn.egg-info/dependency_links.txt
+rgcn.egg-info/requires.txt
+rgcn.egg-info/top_level.txt
+rgcn/layers/__init__.py
+rgcn/layers/graph.py
+rgcn/layers/input_adj.py
