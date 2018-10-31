@@ -21,6 +21,8 @@ import sys
 import time
 import argparse
 
+import keras.backend as K
+
 np.random.seed()
 
 ap = argparse.ArgumentParser()
@@ -89,6 +91,7 @@ for i in range(len(A)):
     D_inv = sp.diags(d_inv)
     A[i] = D_inv.dot(A[i]).tocsr()
 
+
 A_in = [InputAdj(sparse=True) for _ in range(support)]
 X_in = Input(shape=(X.shape[1],), sparse=True)
 
@@ -96,9 +99,9 @@ X_in = Input(shape=(X.shape[1],), sparse=True)
 # print ("L2 type {0}, X_in type {1}, A_in type {2}".format(type(L2), type(X_in), type(A_in)))
 # print ("[X_in] + A_in type {0}".format(type([X_in] + A_in))) # list
 print ("[X_in] + A_in type {0}".format(type(([X_in] + A_in)[0]))) # list
+print ("A_in.shape=({0},)".format(len(A_in)))
 H = GraphConvolution(HIDDEN, support, num_bases=BASES, featureless=True,
                      activation='relu',
-                     # W_regularizer=l2(L2))([X_in] + A_in)
                      W_regularizer=l2(L2))([X_in] + A_in)
 
 H = Dropout(DO)(H)

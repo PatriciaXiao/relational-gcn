@@ -12,6 +12,8 @@ import keras.backend as K
 
 import os
 
+USE_THEANO = False
+
 def set_keras_backend(backend):
 
     if K.backend() != backend:
@@ -19,7 +21,7 @@ def set_keras_backend(backend):
         reload(K)
         assert K.backend() == backend
 
-set_keras_backend("theano")
+if USE_THEANO: set_keras_backend("theano")
 
 
 class GraphConvolution(Layer):
@@ -127,7 +129,7 @@ class GraphConvolution(Layer):
             '''
             tmp = K.ones((self.num_nodes,))
             tmp_do = Dropout(self.dropout)(tmp)
-            output = (output.T * tmp_do).T
+            output = K.transpose(K.transpose(output) * tmp_do)
             
 
         if self.bias:
