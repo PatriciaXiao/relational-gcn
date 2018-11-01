@@ -108,7 +108,7 @@ class GraphConvolution(Layer):
             if not self.featureless:
                 supports.append(K.dot(A[i], features)) # features and adjacent (A)
             else:
-                supports.append(A[i])
+                supports.append(A[i]) # otherwise just A
         supports = K.concatenate(supports, axis=1)
 
         if self.num_bases > 0:
