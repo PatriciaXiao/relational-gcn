@@ -116,7 +116,26 @@ model = Model(input=[X_in] + A_in, output=Y)
 model.compile(loss='categorical_crossentropy', optimizer=Adam(lr=LR))
 
 preds = None
-
+'''
+print(X.todense())
+for i in range(len(A)):
+    print(A[i].todense())
+input()
+'''
+'''
+import sys
+print (X.shape)
+x_content = X.todense()
+for i in range(len(x_content)):
+    for j in range(len(x_content[i])):
+        tmp_sum = np.sum(x_content[i][j])
+        print("sum(x_content[{0}][{1}]...)={2}".format(i, j, tmp_sum))
+        tmp_max = np.max(x_content[i][j])
+        print("max(x_content[{0}][{1}]...)={2}".format(i, j, tmp_max))
+        print(x_content[i][j][0][0].shape)
+sys.exit()
+# all 0
+'''
 # Fit
 for epoch in range(1, NB_EPOCH + 1):
 
