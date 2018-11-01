@@ -10,7 +10,10 @@ The code for the *link prediction* task in [1] can be found in the following rep
 
 run it as:
 
-```python3 train.py -d mutag --bases 0 --hidden 16 --l2norm 0. --testing```
+```
+python3 train.py -d mutag --bases 0 --hidden 16 --l2norm 0. --testing
+python3 train.py -d mutag --bases 30 --hidden 16 --l2norm 5e-4 --testing
+```
 
 ## Installation
 

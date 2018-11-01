@@ -68,13 +68,14 @@ class GraphConvolution(Layer):
         assert len(features_shape) == 2
         self.input_dim = features_shape[1]
 
-        if self.num_bases > 0:
+        if self.num_bases > 0:  # basis, for normalization
+            # weight in->out
             self.W = K.concatenate([self.add_weight((self.input_dim, self.output_dim),
                                                     initializer=self.init,
                                                     name='{}_W'.format(self.name),
                                                     regularizer=self.W_regularizer) for _ in range(self.num_bases)],
                                    axis=0)
-
+            # base
             self.W_comp = self.add_weight((self.support, self.num_bases),
                                           initializer=self.init,
                                           name='{}_W_comp'.format(self.name),
@@ -99,13 +100,13 @@ class GraphConvolution(Layer):
     def call(self, inputs, mask=None):
 
         features = inputs[0]
-        A = inputs[1:]  # list of basis functions
+        A = inputs[1:]  # list of basis functions; features:X, A: adjacent (could also be introducing the parameter c); paper 2.2
 
         # convolve
         supports = list()
         for i in range(self.support):
             if not self.featureless:
-                supports.append(K.dot(A[i], features))
+                supports.append(K.dot(A[i], features)) # features and adjacent (A)
             else:
                 supports.append(A[i])
         supports = K.concatenate(supports, axis=1)
@@ -114,9 +115,9 @@ class GraphConvolution(Layer):
             self.W = K.reshape(self.W,
                                (self.num_bases, self.input_dim, self.output_dim))
             self.W = K.permute_dimensions(self.W, (1, 0, 2))
-            V = K.dot(self.W_comp, self.W)
+            V = K.dot(self.W_comp, self.W) # W_comp is the base, W is the coefficients
             V = K.reshape(V, (self.support*self.input_dim, self.output_dim))
-            output = K.dot(supports, V)
+            output = K.dot(supports, V)  # supports * V = (1/c * h) * W
         else:
             output = K.dot(supports, self.W)
             # print (supports.shape) # (?, 752)
@@ -127,7 +128,7 @@ class GraphConvolution(Layer):
         # with dropout applied to the vector of ones.
         if self.featureless:
             tmp = K.ones(self.num_nodes)
-            tmp_do = Dropout(self.dropout)(tmp)
+            tmp_do = Dropout(self.dropout)(tmp)         
             output = (output.T * tmp_do).T
             '''
             tmp = K.ones((self.num_nodes,))
@@ -138,7 +139,7 @@ class GraphConvolution(Layer):
 
         if self.bias:
             output += self.b
-        return self.activation(output)
+        return self.activation(output) # sigma
 
     def get_config(self):
         config = {'output_dim': self.output_dim,

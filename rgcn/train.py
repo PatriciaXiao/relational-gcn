@@ -56,7 +56,7 @@ VALIDATION = args['validation']
 LR = args['learnrate']
 L2 = args['l2norm']
 HIDDEN = args['hidden']
-BASES = args['bases']
+BASES = args['bases'] # bases defined
 DO = args['dropout']
 
 dirname = os.path.dirname(os.path.realpath(sys.argv[0]))
