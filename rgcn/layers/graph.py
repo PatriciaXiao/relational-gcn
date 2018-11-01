@@ -119,8 +119,8 @@ class GraphConvolution(Layer):
             output = K.dot(supports, V)
         else:
             output = K.dot(supports, self.W)
-            print (supports.shape) # (?, 752)
-            print 
+            # print (supports.shape) # (?, 752)
+            # print 
             # self.W dim [1111268,2]
 
         # if featureless add dropout to output, by elementwise multiplying with column vector of ones,
