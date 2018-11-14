@@ -70,6 +70,17 @@ y = data['y']
 train_idx = data['train_idx']
 test_idx = data['test_idx']
 
+print("Relations used and their frequencies" + str([a.sum() for a in A]))
+print("First relation shape in A: {0}".format(A[0].shape))
+print("First entry of first relation in A: {0}".format(A[0][0, 0]))
+print("Another entry of first relation in A: {0}".format(A[0][10, 1]))
+print("This is y {0}".format(y)) # {((row, col), val)} # row: item; col: category; value: 1 for yes
+# print("This is what X supposed to be {0}".format(sp.identity(A[0].shape[0], format='csr'))) # Identity matrix
+# print("train_idx: {0}".format(train_idx))
+print("train index unique set? ", len(train_idx) == len(set(train_idx)), len(train_idx) ) # same as the train tsv
+print("test index unique set? ", len(test_idx) == len(set(test_idx)), len(test_idx) ) # same as the test tsv
+exit(0)
+
 # Get dataset splits
 y_train, y_val, y_test, idx_train, idx_val, idx_test = get_splits(y, train_idx,
                                                                   test_idx,
@@ -96,10 +107,6 @@ A_in = [InputAdj(sparse=True) for _ in range(support)]
 X_in = Input(shape=(X.shape[1],), sparse=True)
 
 # Define model architecture
-# print ("L2 type {0}, X_in type {1}, A_in type {2}".format(type(L2), type(X_in), type(A_in)))
-# print ("[X_in] + A_in type {0}".format(type([X_in] + A_in))) # list
-# print ("[X_in] + A_in type {0}".format(type(([X_in] + A_in)[0]))) # list
-# print ("A_in.shape=({0},)".format(len(A_in)))
 H = GraphConvolution(HIDDEN, support, num_bases=BASES, featureless=True,
                      activation='relu',
                      W_regularizer=l2(L2))([X_in] + A_in)
