@@ -13,6 +13,9 @@ run it as:
 ```
 python3 train.py -d mutag --bases 0 --hidden 16 --l2norm 0. --testing
 python3 train.py -d mutag --bases 30 --hidden 16 --l2norm 5e-4 --testing
+
+python3 train.py -d twitter --bases 0 --hidden 16 --l2norm 0. --testing
+python3 train.py -d twitter --bases 30 --hidden 16 --l2norm 5e-4 --testing
 ```
 
 ## Installation

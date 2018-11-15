@@ -59,6 +59,8 @@ HIDDEN = args['hidden']
 BASES = args['bases'] # bases defined
 DO = args['dropout']
 
+DEBUG_DATA = False
+
 dirname = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 with open(dirname + '/' + DATASET + '.pickle', 'rb') as f:
@@ -70,16 +72,21 @@ y = data['y']
 train_idx = data['train_idx']
 test_idx = data['test_idx']
 
-print("Relations used and their frequencies" + str([a.sum() for a in A]))
-print("First relation shape in A: {0}".format(A[0].shape))
-print("First entry of first relation in A: {0}".format(A[0][0, 0]))
-print("Another entry of first relation in A: {0}".format(A[0][10, 1]))
-print("This is y {0}".format(y)) # {((row, col), val)} # row: item; col: category; value: 1 for yes
-# print("This is what X supposed to be {0}".format(sp.identity(A[0].shape[0], format='csr'))) # Identity matrix
-# print("train_idx: {0}".format(train_idx))
-print("train index unique set? ", len(train_idx) == len(set(train_idx)), len(train_idx) ) # same as the train tsv
-print("test index unique set? ", len(test_idx) == len(set(test_idx)), len(test_idx) ) # same as the test tsv
-exit(0)
+
+if DEBUG_DATA:
+    print("Relations used and their frequencies " + str([a.sum() for a in A]))
+    print("First relation shape in A: {0}".format(A[0].shape))
+    print("First entry of first relation in A: {0}".format(A[0][0, 0]))
+    print("Another entry of first relation in A: {0}".format(A[0][10, 1]))
+    print("This is y {0}".format(y)) # {((row, col), val)} # row: item; col: category; value: 1 for yes
+    # print("This is what X supposed to be {0}".format(sp.identity(A[0].shape[0], format='csr'))) # Identity matrix
+    print("test_idx: {0}".format(test_idx))
+    print("this is y: {0}".format(y.toarray()))
+    print("this is the amount of 1s in y: {0}".format(int(y.sum())))
+    print("y shape: ({0}, {1})".format(len(y.toarray()), len(y.toarray()[1]) ))
+    print("train index unique set? ", len(train_idx) == len(set(train_idx)), len(train_idx) ) # same as the train tsv
+    print("test index unique set? ", len(test_idx) == len(set(test_idx)), len(test_idx) ) # same as the test tsv
+    exit(0)
 
 # Get dataset splits
 y_train, y_val, y_test, idx_train, idx_val, idx_test = get_splits(y, train_idx,
