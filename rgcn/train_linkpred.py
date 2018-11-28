@@ -23,35 +23,13 @@ import argparse
 
 import keras.backend as K
 
-import tensorflow as tf
-
-def myloss(output, target, from_logits=False):
-    """Categorical crossentropy between an output tensor and a target tensor.
-    # Arguments
-        output: A tensor resulting from a softmax
-            (unless `from_logits` is True, in which
-            case `output` is expected to be the logits).
-        target: A tensor of the same shape as `output`.
-        from_logits: Boolean, whether `output` is the
-            result of a softmax, or is a tensor of logits.
-    # Returns
-        Output tensor.
-    """
-    # Note: tf.nn.softmax_cross_entropy_with_logits
-    # expects logits, Keras expects probabilities.
-    if not from_logits:
-        # scale preds so that the class probas of each sample sum to 1
-        output /= tf.reduce_sum(output,
-                                reduction_indices=len(output.get_shape()) - 1,
-                                keep_dims=True)
-        # manual computation of crossentropy
-        epsilon = _to_tensor(_EPSILON, output.dtype.base_dtype)
-        output = tf.clip_by_value(output, epsilon, 1. - epsilon)
-        return - tf.reduce_sum(target * tf.log(output),
-                               reduction_indices=len(output.get_shape()) - 1)
-    else:
-        return tf.nn.softmax_cross_entropy_with_logits(labels=target,
-                                                       logits=output)
+import theano.tensor as T
+def myloss(output, target):
+    '''
+        categorical_crossentropy, customize function
+        limitation: theano functions only, no tensorflow
+    '''
+    return T.nnet.categorical_crossentropy(target, output)
 
 np.random.seed()
 
