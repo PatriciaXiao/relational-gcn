@@ -24,12 +24,33 @@ import argparse
 import keras.backend as K
 
 import theano.tensor as T
-def myloss(output, target):
+def myloss(target, output, from_logits=False, axis=-1): # myloss(output, target):
     '''
         categorical_crossentropy, customize function
         limitation: theano functions only, no tensorflow
     '''
-    return T.nnet.categorical_crossentropy(target, output)
+    # return T.nnet.categorical_crossentropy(target, output)
+    output_dimensions = list(range(len(K.theano_backend.int_shape(output))))
+    if axis != -1 and axis not in output_dimensions:
+        raise ValueError(
+            '{}{}{}'.format(
+                'Unexpected channels axis {}. '.format(axis),
+                'Expected to be -1 or one of the axes of `output`, ',
+                'which has {} dimensions.'.format(len(K.theano_backend.int_shape(output)))))
+    # If the channels are not in the last axis, move them to be there:
+    if axis != -1 and axis != output_dimensions[-1]:
+        permutation = output_dimensions[:axis]
+        permutation += output_dimensions[axis + 1:] + [axis]
+        output = K.theano_backend.permute_dimensions(output, permutation)
+        target = K.theano_backend.permute_dimensions(target, permutation)
+    if from_logits:
+        output = T.nnet.softmax(output)
+    else:
+        # scale preds so that the class probas of each sample sum to 1
+        output /= output.sum(axis=-1, keepdims=True)
+    # avoid numerical instability with _EPSILON clipping
+    output = T.clip(output, K.common.epsilon(), 1.0 - K.common.epsilon())
+    return T.nnet.categorical_crossentropy(output, target)
 
 np.random.seed()
 
