@@ -10,12 +10,19 @@ The code for the *link prediction* task in [1] can be found in the following rep
 
 run it as:
 
-```
+```shell
+pip3 install keras==1.2.1
+pip3 install theano
+# pip3 install theano==0.9.0
+pip3 install tensorflow
+
 python3 train.py -d mutag --bases 0 --hidden 16 --l2norm 0. --testing
 python3 train.py -d mutag --bases 30 --hidden 16 --l2norm 5e-4 --testing
 
 python3 train.py -d twitter --bases 0 --hidden 16 --l2norm 0. --testing
 python3 train.py -d twitter --bases 30 --hidden 16 --l2norm 5e-4 --testing
+
+python3 train_linkpred.py -d twitter --bases 30 --hidden 16 --l2norm 5e-4 --testing
 ```
 
 ## Installation
