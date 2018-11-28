@@ -23,6 +23,13 @@ import argparse
 
 import keras.backend as K
 
+# https://github.com/keras-team/keras
+# https://github.com/keras-team/keras/tree/master/keras/backend
+# https://github.com/keras-team/keras/blob/master/keras/backend/theano_backend.py
+# http://deeplearning.net/software/theano/library/tensor/nnet/nnet.html
+# https://keras.io/losses/
+# https://stackoverflow.com/questions/43818584/custom-loss-function-in-keras
+# https://towardsdatascience.com/custom-loss-functions-for-deep-learning-predicting-home-values-with-keras-for-r-532c9e098d1f
 import theano.tensor as T
 def myloss(target, output, from_logits=False, axis=-1): # myloss(output, target):
     '''
